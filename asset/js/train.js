@@ -51,37 +51,40 @@ var database = firebase.database();
       var trainDestination = childSnapshot.val().destination;
       var trainFirstArrival = childSnapshot.val().arrival;
       var trainFreq = childSnapshot.val().frequency;
-      var minutesAway = 
-      console.log(trainName);
-      console.log(trainDestination);
-      console.log(trainFirstArrival);
-      console.log(trainFreq);
-      var newRow = $("<tr>").append(
-        $("<td>").text(trainName),
-        $("<td>").text(trainDestination),
-        $("<td>").text(trainFirstArrival),
-        $("<td>").text(trainFreq)
-      );
-      $("#new-train > tbody").append(newRow);
+      // var minutesAway = 
+      var currentTime = 0;
+      var now = new Date();
+      currentTime = now.getHours()*60 + now.getMinutes();
+      var firstTrainTime = parseInt(trainFirstArrival.split(":")[0]*60) + parseInt(trainFirstArrival.split(":")[1]);
+      // firstTrainTime = trainFirstArrival.split(":")[0]*60 + trainFirstArrival.split(":")[1];
+      var nextTrain = 0;
+      var trainFrequency = parseInt(trainFreq);
+      // var trainCounter = 0;
+      var waitTime = 0;
+      nextTrain = firstTrainTime;
+
+      while( nextTrain < currentTime){
+        nextTrain += trainFrequency;
+      }
+      waitTime = nextTrain - currentTime;
+      nextHour = Math.floor(nextTrain/60);
+      nextMinute = Math.floor(nextTrain% 60);
+        console.log(trainName);
+        console.log(trainDestination);
+        console.log(trainFirstArrival);
+        console.log(trainFreq);
+        var newRow = $("<tr>").append(
+          $("<td>").text(trainName),
+          $("<td>").text(trainDestination),
+          $("<td>").text(nextHour + ":" + nextMinute),
+          $("<td>").text(trainFreq),
+          $("<td>").text(waitTime)
+        );
+        $("#new-train > tbody").append(newRow);
       
     });
   
-    var currentTime = 0;
-    var nextTrain = 0;
-    var trainFrequency = trainFreq;
-    var trainCounter = 0;
-    var waitTime = 0;
-
-    currentTime = trainFirstArrival;
-    nextTrain = currentTime + 30;
     
-    while( nextTrain < currentTime){
-      nextTrain += trainFreq;
-    }
-    (nextTrain == currentTime); //true maybe
-    waitTime = nextTrain - currentTime;
-    nextHour = Math.floor(nextTrain/60);
-    nextMinute = Math.floor(nextTrain% 60);
     //return hours + ":" + minutes;
     
     // return '$(nextHour)':'(nextMinutes)';
